@@ -175,9 +175,11 @@ function clickCard() {
                     console.log("checkPlayableCards(playerHand) < 0 && checkPlayableCards(bobsHand) < 0");
                     playCount = 0;
                     if(isPlayerLastPlay){
+                        playPoints += 2;
                         callDealerPlay();
                     }
                     else{
+                        dealerPoints += 2;
                         enableClicks();
                     }
                 }
@@ -196,12 +198,29 @@ function callDealerPlay(){
     if(checkPlayableCards(playHand) < 0 && checkPlayableCards(bobsHand) < 0){
         console.log("checkPlayableCards(playerHand) < 0 && checkPlayableCards(bobsHand) < 0");
         playCount = 0;
+        if(isPlayerLastPlay){
+            playPoints += 2;
+        }
+        else{
+            dealerPoints += 2;
+        }
     }
-    playCount += dealerPlay();
-    document.getElementById("play-sum").innerText = playCount;
+    result =  dealerPlay();
+    if (result != 0){
+        playCount += result;
+        dealerPoints += checkPlayPoints();
+        document.getElementById("player-points").innerText = dealerPoints;
+        document.getElementById("play-sum").innerText = playCount;
+    }
     if(checkPlayableCards(playHand) < 0 && checkPlayableCards(bobsHand) < 0){
         console.log("checkPlayableCards(playerHand) < 0 && checkPlayableCards(bobsHand) < 0");
         playCount = 0;
+        if(isPlayerLastPlay){
+            playPoints += 2;
+        }
+        else{
+            dealerPoints += 2;
+        }
     }
     enableClicks();
 }
@@ -412,6 +431,7 @@ function dealerPlay(){
         return 0;
     }
     else if(checkPlayableCards(bobsHand) >= 0){
+        console.log("dealer play");
         isPlayerLastPlay = false;
         let index = checkPlayableCards(bobsHand);
         let dealerCards = document.getElementsByClassName("dealer-card");
