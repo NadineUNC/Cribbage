@@ -71,12 +71,22 @@ function startGame() {
         document.getElementById('deck').removeChild(images[1]);
     }
     if(isPlayerDealer){
-        document.getElementById("bob-dealer").innerText = "";
-        document.getElementById("player-dealer").innerText = "Dealer";
+        var token = document.createElement("div");
+        token.classList.add("circle");
+        token.innerText = "D";
+        if(document.getElementById("bob-dealer").firstChild != null){
+            document.getElementById("bob-dealer").removeChild(document.getElementById("bob-dealer").firstChild);
+        }
+        document.getElementById("player-dealer").appendChild(token);
     }
     else{
-        document.getElementById("player-dealer").innerText = "";
-        document.getElementById("bob-dealer").innerText = "Dealer";
+        var token = document.createElement("div");
+        token.classList.add("circle");
+        token.innerText = "D";
+        if(document.getElementById("player-dealer").firstChild != null){
+            document.getElementById("player-dealer").removeChild(document.getElementById("player-dealer").firstChild);
+        }
+        document.getElementById("bob-dealer").appendChild(token);
     }
     buildDeck();
     shuffleDeck();

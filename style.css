@@ -97,17 +97,14 @@ body {
 }
 
 .circle {
-    height: 35px;
-    width: 35px;
-    background-color: #FDDA0D;
     border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    line-height: 0px;
+    background: #FDDA0D;
     display: inline-flex;
     text-align: center;
     vertical-align: middle;
-}
-
-.circle .p{
-    text-align: center;
-    vertical-align: middle;
-    display: inline-table;
+    justify-content: center;
+    align-items: center;
 }
