@@ -3,32 +3,38 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Black Jack</title>
+        <title>Cribbage</title>
         <link rel="stylesheet" href="style.css">
         <script src="index.js"></script>
     </head>
 
     <body>
+        <header>This is Cribbage! The first person to 121 points wins!</header>
         <div class="overlay" id="overlay"></div>
+        <div  class="grid-container">
+            <div class="deck-column">
+                <button class="button" id="button"><span id="button-text"></span></button>
+                <div class="deck" id="deck">
+                    <img src="./cards/BACK.png" id="deckImage">
+                </div>
 
-        <div class="deck" id="deck">
-            <button class="button" id="button"><span id="button-text"></span></button>
-            <img src="./cards/BACK.png" id="deckImage">
+                <h2>Crib</h2>
+                <div class="hand" id="crib-cards"></div>
+            </div>
+
+            <div class="hands-column">
+                <h2><span id="bob-dealer"><div class="circle"><p>D</p></div></span> Bob's Points: <span id="dealer-points"></span></h2>
+                <div class="hand" id="dealer-cards"></div>
+
+                <h2>Play Count: <span id="play-sum"></span></h2>
+                <div class="hand" id="the-play"></div>
+
+                <h2><span id="player-dealer"></span> Your Points: <span id="player-points"></span></h2>
+                <div class="hand" id="your-cards"></div>
+
+                <br>
+                <p id="results"></p>
+            </div>
         </div>
-
-        <h2><span id="bob-dealer"></span> Bob's Points: <span id="dealer-points"></span></h2>
-        <div class="hand" id="dealer-cards"></div>
-
-        <h2>Play Count: <span id="play-sum"></span></h2>
-        <div class="hand" id="the-play"></div>
-
-        <h2><span id="player-dealer"></span> Your Points: <span id="player-points"></span></h2>
-        <div class="hand" id="your-cards"></div>
-
-        <h2>Crib</h2>
-        <div class="hand" id="crib-cards"></div>
-
-        <br>
-        <p id="results"></p>
     </body>
 </html>
