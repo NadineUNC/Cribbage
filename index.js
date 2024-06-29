@@ -199,6 +199,18 @@ function clickCard() {
             }, 1000);
             this.removeEventListener('click', clickCard);
         }
+        else if(checkPlayableCards(playHand) < 0 && checkPlayableCards(bobsHand) < 0){
+            console.log("checkPlayableCards(playerHand) < 0 && checkPlayableCards(bobsHand) < 0");
+            playCount = 0;
+            if(isPlayerLastPlay){
+                playPoints += 2;
+                callDealerPlay();
+            }
+            else{
+                dealerPoints += 2;
+                enableClicks();
+            }
+        }
     }
     console.log(playHand);
     console.log(bobsHand);
@@ -407,6 +419,7 @@ function cutDeck(){
         document.getElementById("play-sum").innerText = playCount;
     }
     enableClicks();
+    document.getElementById("deckImage").removeEventListener('click', cutDeck);
 }
 
 function animateCardMovement(card, location){
