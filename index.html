@@ -8,8 +8,11 @@
         <script src="index.js"></script>
     </head>
 
+    <header>
+        <h2>This is Cribbage! The first person to 121 points wins. Click the deck to draw a card. Lowest card becomes the first dealer.</h2>
+    </header>
+
     <body>
-        <header>This is Cribbage! The first person to 121 points wins!</header>
         <div class="overlay" id="overlay"></div>
         <div  class="grid-container">
             <div class="deck-column">
@@ -23,7 +26,6 @@
             </div>
 
             <div class="hands-column">
-                <!-- <div class="circle"><p>D</p></div> -->
                 <h2><span id="bob-dealer"></span> Bob's Points: <span id="dealer-points"></span></h2>
                 <div class="hand" id="dealer-cards"></div>
 

@@ -1,7 +1,18 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
-    background-color: #00a000;
+    background-color: #29923f;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #FFFFE4;
+    text-align: center;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+    height: 5vh;
 }
 
 .grid-container {
@@ -27,14 +38,13 @@ body {
 }
 
 #dealer-cards img {
-    height: 175px;
-    width: 125px;
+    height: 140px;
+    width: 100px;
     margin: 1px;
 }
 
 #dealer-cards {
-    min-height: 175px;
-    max-height: auto;
+    height: 140px;
 }
 
 #the-play img {
@@ -45,7 +55,6 @@ body {
 
 #the-play {
     min-height: 140px;
-    max-height: auto;
 }
 
 #your-cards img {
