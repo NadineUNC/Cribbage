@@ -246,7 +246,7 @@ function callDealerPlay(){
     if (result != 0){
         playCount += result;
         dealerPoints += checkPlayPoints();
-        document.getElementById("player-points").innerText = dealerPoints;
+        document.getElementById("dealer-points").innerText = dealerPoints;
         document.getElementById("play-sum").innerText = playCount;
     }
     if(checkPlayableCards(playHand) < 0 && checkPlayableCards(bobsHand) < 0){
@@ -524,7 +524,23 @@ function removeAllImages(div) {
 }
 
 function finishRound(){
-    document.getElementById("dealer-card")
+    document.getElementById("dealer-cards").innerText = "";
+    document.getElementById("crib-cards").innerText = "";
+    document.getElementById("your-cards").innerText = "";
+    document.getElementById("the-play").innerText = "";
+    for(let i = 0; i < 4; i++){
+        cardImg = document.createElement("img");
+        cardImg.src = "./cards/" + dealerHand[i] + ".png";
+        document.getElementById("dealer-cards").appendChild(cardImg);
+
+        cardImg = document.createElement("img");
+        cardImg.src = "./cards/" + cribHand[i] + ".png";
+        document.getElementById("crib-cards").appendChild(cardImg);
+
+        cardImg = document.createElement("img");
+        cardImg.src = "./cards/" + playerHand[i] + ".png";
+        document.getElementById("your-cards").appendChild(cardImg);
+    }
     playerPoints += countpoints(playerHand);
     dealerPoints += countpoints(dealerHand);
     if(isPlayerDealer){
