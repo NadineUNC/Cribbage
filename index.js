@@ -553,20 +553,39 @@ function finishRound(){
         cardImg.src = "./cards/" + playerHand[i] + ".png";
         document.getElementById("your-cards").appendChild(cardImg);
     }
-    playerPoints += countpoints(playerHand);
-    dealerPoints += countpoints(dealerHand);
-    if(isPlayerDealer){
-        playerPoints += countpoints(cribHand);
-    }
-    else{
-        dealerPoints += countpoints(cribHand);
-    }
-    document.getElementById("player-points").innerText = playerPoints;
-    document.getElementById("dealer-points").innerText = dealerPoints;
-    enableClicks();
-    document.getElementById("button-text").innerText = "start next round";
-    isPlayerDealer = !isPlayerDealer;
-    document.getElementById("button").addEventListener("click", startGame);
+    points = countpoints(playerHand);
+    document.getElementById("header").innerText = "You hand has " + points + " points";
+    setTimeout(() => {
+        playerPoints += countpoints(playerHand);
+        document.getElementById("player-points").innerText = playerPoints;
+        points = countpoints(dealerHand);
+        document.getElementById("header").innerText = "Bob's hand has " + points + " points";
+        setTimeout(() => {
+            dealerPoints += countpoints(dealerHand);
+            document.getElementById("dealer-points").innerText = dealerPoints;
+            points = countpoints(cribHand);
+            if(isPlayerDealer){
+                document.getElementById("header").innerText = "You get " + points + " points from the Crib";
+            }
+            else{
+                document.getElementById("header").innerText = "Bob gets " + points + " from the Crib";
+            }
+            setTimeout(() => {
+                if(isPlayerDealer){
+                    playerPoints += countpoints(cribHand);
+                    document.getElementById("player-points").innerText = playerPoints;
+                }
+                else{
+                    dealerPoints += countpoints(cribHand);
+                    document.getElementById("dealer-points").innerText = dealerPoints;
+                }
+                enableClicks();
+                document.getElementById("button-text").innerText = "start next round";
+                isPlayerDealer = !isPlayerDealer;
+                document.getElementById("button").addEventListener("click", startGame);
+            }, 2000);
+        }, 2000);
+    }, 2000);
 }
 
 function countpoints(hand){
