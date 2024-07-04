@@ -55,7 +55,16 @@ function pickDealer(){
         card2 = deck.pop();
         cardImg2.src = "./cards/" + card2 + ".png";
         document.getElementById("dealer-cards").appendChild(cardImg2);
-        isPlayerDealer = getValue(card) <= getValue(card2)
+        isPlayerDealer = getRank(card) < getRank(card2)
+        if(getRank(card) == getRank(card2)){
+            document.getElementById("header").innerText = "It's a tie redraw!";
+            setTimeout(() => {
+                document.getElementById("dealer-cards").innerText = "";
+                document.getElementById("your-cards").innerText = "";
+                document.getElementById("deckImage").addEventListener('click', pickDealer);
+            }, 2000);
+            return;
+        }
         if(isPlayerDealer){
             document.getElementById("header").innerText = "You Won! You are the dealer this round";
         }
@@ -225,6 +234,9 @@ function clickCard() {
                 dealerPoints += 2;
                 enableClicks();
             }
+        }
+        if(bobsHand.length + playHand.length == 0){
+            finishRound();
         }
     }
     console.log(playHand);
