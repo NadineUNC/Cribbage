@@ -5,11 +5,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Cribbage</title>
         <link rel="stylesheet" href="style.css">
+        <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet"> -->
         <script src="index.js"></script>
     </head>
 
+    <header>
+        <h2 class="header" id="header">This is Cribbage! The first person to 121 points wins. Click the deck to draw a card. Lowest card becomes the first dealer.</h2>
+    </header>
+
     <body>
-        <header>This is Cribbage! The first person to 121 points wins!</header>
         <div class="overlay" id="overlay"></div>
         <div  class="grid-container">
             <div class="deck-column">
@@ -23,15 +27,14 @@
             </div>
 
             <div class="hands-column">
-                <!-- <div class="circle"><p>D</p></div> -->
-                <h2><span id="bob-dealer"></span> Bob's Points: <span id="dealer-points"></span></h2>
+                <h2><span id="bob-dealer"></span> Bob's Points: <span id="dealer-points">0</span></h2>
                 <div class="hand" id="dealer-cards"></div>
 
-                <h2>Play Count: <span id="play-sum"></span></h2>
+                <h2>Play Count: <span id="play-sum">0</span></h2>
                 <div class="hand" id="the-play"></div>
 
-                <h2><span id="player-dealer"></span> Your Points: <span id="player-points"></span></h2>
-                <div class="hand" id="your-cards"></div>
+                <h2><span id="player-dealer"></span> Your Points: <span id="player-points">0</span></h2>
+                <div class="hand hand fan active-hand" id="your-cards"></div>
 
                 <br>
                 <p id="results"></p>

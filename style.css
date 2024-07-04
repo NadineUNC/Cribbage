@@ -1,7 +1,18 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
-    background-color: #00a000;
+    background-color: #29923f;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #FFFFE4;
+    text-align: center;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+    height: 5vh;
 }
 
 .grid-container {
@@ -27,14 +38,13 @@ body {
 }
 
 #dealer-cards img {
-    height: 175px;
-    width: 125px;
+    height: 140px;
+    width: 100px;
     margin: 1px;
 }
 
 #dealer-cards {
-    min-height: 175px;
-    max-height: auto;
+    height: 140px;
 }
 
 #the-play img {
@@ -45,13 +55,13 @@ body {
 
 #the-play {
     min-height: 140px;
-    max-height: auto;
 }
 
 #your-cards img {
     height: 175px;
     width: 125px;
     margin: 1px;
+    cursor: pointer;
 }
 
 #your-cards {
@@ -82,9 +92,9 @@ body {
 }
 
 .card-move {
-    transition: all 0.5s ease-in-out;
+    transition: all 0.2s ease-in-out;
     position: absolute;
-    margin-right: 10px;
+    transition-duration: 5s;
 }
 
 .hand {
@@ -93,7 +103,7 @@ body {
 }
 
 .hand .card-move {
-    margin-right: 10px; /* Adjust as needed */
+    margin-right: 10px;
 }
 
 .circle {
