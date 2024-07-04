@@ -1,6 +1,6 @@
 let deck;
-let playerPoints = 0;
-let dealerPoints = 0;
+let playerPoints = new ObservableNumber(0, "player-points");
+let dealerPoints = new ObservableNumber(0, "dealer-points");
 let dealerHand = [];
 let cribHand = [];
 let playerHand = [];
@@ -12,6 +12,23 @@ let isPlayerDealer;
 let bobsHand = [];
 let playHand = [];
 let isPlayerLastPlay;
+
+function ObservableNumber(initialValue, player) {
+    let value = initialValue;
+
+
+    function notify() {
+        if (value == 121) {
+            finishGame();
+        }
+    }
+
+    this.add = function(amount) {
+        value += amount;
+        document.getElementById(player).innerText = value;
+        notify();
+    }
+}
 
 
 window.onload = function() {
@@ -117,6 +134,8 @@ function startGame() {
     dealerHand = [];
     cribHand = [];
     playerHand = [];
+    document.getElementById("dealer-cards").innerText = "";
+    document.getElementById("your-cards").innerText = "";
     for (let i = 0; i < 6; i++) {
         let cardImg = document.createElement("img");
         let card = deck.pop();
@@ -209,11 +228,13 @@ function clickCard() {
                     console.log("checkPlayableCards(playerHand) < 0 && checkPlayableCards(bobsHand) < 0");
                     playCount = 0;
                     if(isPlayerLastPlay){
-                        playPoints += 2;
+                        playerPoints.add(1);
+                        document.getElementById("header").innerText = "You get the Go!";
                         callDealerPlay();
                     }
                     else{
-                        dealerPoints += 2;
+                        dealerPoints.add(1);
+                        document.getElementById("header").innerText = "Bob gets the Go!";
                         enableClicks();
                     }
                 }
@@ -227,11 +248,13 @@ function clickCard() {
             console.log("checkPlayableCards(playerHand) < 0 && checkPlayableCards(bobsHand) < 0");
             playCount = 0;
             if(isPlayerLastPlay){
-                playPoints += 2;
+                playerPoints.add(1);
+                document.getElementById("header").innerText = "You get the Go!";
                 callDealerPlay();
             }
             else{
-                dealerPoints += 2;
+                dealerPoints.add(1);
+                document.getElementById("header").innerText = "Bob gets the Go!";
                 enableClicks();
             }
         }
@@ -244,31 +267,42 @@ function clickCard() {
 }
 
 function callDealerPlay(){
+    if(bobsHand.length + playHand.length == 0){
+        finishRound();
+        return
+    }
     if(checkPlayableCards(playHand) < 0 && checkPlayableCards(bobsHand) < 0){
         console.log("checkPlayableCards(playerHand) < 0 && checkPlayableCards(bobsHand) < 0");
         playCount = 0;
         if(isPlayerLastPlay){
-            playPoints += 2;
+            playerPoints.add(1);
+            document.getElementById("header").innerText = "You get the Go!";
+            callDealerPlay();
         }
         else{
-            dealerPoints += 2;
+            dealerPoints.add(1);
+            document.getElementById("header").innerText = "Bob gets the Go!";
+            enableClicks();
         }
     }
     result =  dealerPlay();
     if (result != 0){
         playCount += result;
-        dealerPoints += checkPlayPoints();
-        document.getElementById("dealer-points").innerText = dealerPoints;
+        dealerPoints.add(checkPlayPoints());
         document.getElementById("play-sum").innerText = playCount;
     }
     if(checkPlayableCards(playHand) < 0 && checkPlayableCards(bobsHand) < 0){
         console.log("checkPlayableCards(playerHand) < 0 && checkPlayableCards(bobsHand) < 0");
         playCount = 0;
         if(isPlayerLastPlay){
-            playPoints += 2;
+            playerPoints.add(1);
+            document.getElementById("header").innerText = "You get the Go!";
+            callDealerPlay();
         }
         else{
-            dealerPoints += 2;
+            dealerPoints.add(1);
+            document.getElementById("header").innerText = "Bob gets the Go!";
+            enableClicks();
         }
     }
     enableClicks();
@@ -296,8 +330,7 @@ function moveCardToPlay(card){
     playCount += getValue(card);
     document.getElementById("play-sum").innerText = playCount;
     playedCards += 1;
-    playerPoints += checkPlayPoints();
-    document.getElementById("player-points").innerText = playerPoints;
+    playerPoints.add(checkPlayPoints());
     }, 100);
 }
 
@@ -306,29 +339,29 @@ function checkPlayPoints(){
     if(playCount == 15 || playCount == 31){
         points += 2
     }
-        let playCards = document.getElementById("the-play")
-        let cards = Array.from(playCards.querySelectorAll('img'));
-        cards = cards.map(element => getRank(element.src.substring(element.src.lastIndexOf("/") + 1, element.src.lastIndexOf(".png"))));
-        cardRank = cards[cards.length - 1];
-        let i = cards.length - 2
-        let matches = 0;
-        while(i >= 0 && cardRank == cards[i]){
-            matches += 1;
-            if(matches == 1){
-                points += 2;
-            }
-            else if(matches == 2){
-                points += 6;
-            }
-            else{
-                points += 12;
-            }
-            i -= 1
+    let playCards = document.getElementById("the-play")
+    let cards = Array.from(playCards.querySelectorAll('img'));
+    cards = cards.map(element => getRank(element.src.substring(element.src.lastIndexOf("/") + 1, element.src.lastIndexOf(".png"))));
+    cardRank = cards[cards.length - 1];
+    let i = cards.length - 2
+    let matches = 0;
+    while(i >= 0 && cardRank == cards[i]){
+        matches += 1;
+        if(matches == 1){
+            points += 2;
         }
-        if(cards.length >= 3){
-            points += countPlayRun(cards);
+        else if(matches == 2){
+            points += 6;
         }
-        return points;
+        else{
+            points += 12;
+        }
+        i -= 1
+    }
+    if(cards.length >= 3){
+        points += countPlayRun(cards);
+    }
+    return points;
 }
 
 function countPlayRun(cards){
@@ -556,13 +589,11 @@ function finishRound(){
     points = countpoints(playerHand);
     document.getElementById("header").innerText = "You hand has " + points + " points";
     setTimeout(() => {
-        playerPoints += countpoints(playerHand);
-        document.getElementById("player-points").innerText = playerPoints;
+        playerPoints.add(countpoints(playerHand));
         points = countpoints(dealerHand);
         document.getElementById("header").innerText = "Bob's hand has " + points + " points";
         setTimeout(() => {
-            dealerPoints += countpoints(dealerHand);
-            document.getElementById("dealer-points").innerText = dealerPoints;
+            dealerPoints.add(countpoints(dealerHand));
             points = countpoints(cribHand);
             if(isPlayerDealer){
                 document.getElementById("header").innerText = "You get " + points + " points from the Crib";
@@ -572,12 +603,10 @@ function finishRound(){
             }
             setTimeout(() => {
                 if(isPlayerDealer){
-                    playerPoints += countpoints(cribHand);
-                    document.getElementById("player-points").innerText = playerPoints;
+                    playerPoints.add(countpoints(cribHand));
                 }
                 else{
-                    dealerPoints += countpoints(cribHand);
-                    document.getElementById("dealer-points").innerText = dealerPoints;
+                    dealerPoints.add(countpoints(cribHand));
                 }
                 enableClicks();
                 document.getElementById("button-text").innerText = "start next round";
@@ -586,6 +615,10 @@ function finishRound(){
             }, 2000);
         }, 2000);
     }, 2000);
+}
+
+function finishGame(){
+    return
 }
 
 function countpoints(hand){
