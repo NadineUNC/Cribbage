@@ -5,11 +5,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Cribbage</title>
         <link rel="stylesheet" href="style.css">
+        <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet"> -->
         <script src="index.js"></script>
     </head>
 
     <header>
-        <h2>This is Cribbage! The first person to 121 points wins. Click the deck to draw a card. Lowest card becomes the first dealer.</h2>
+        <h2 class="header" id="header">This is Cribbage! The first person to 121 points wins. Click the deck to draw a card. Lowest card becomes the first dealer.</h2>
     </header>
 
     <body>
@@ -33,7 +34,7 @@
                 <div class="hand" id="the-play"></div>
 
                 <h2><span id="player-dealer"></span> Your Points: <span id="player-points"></span></h2>
-                <div class="hand" id="your-cards"></div>
+                <div class="hand hand fan active-hand" id="your-cards"></div>
 
                 <br>
                 <p id="results"></p>

@@ -61,6 +61,7 @@ header {
     height: 175px;
     width: 125px;
     margin: 1px;
+    cursor: pointer;
 }
 
 #your-cards {
@@ -91,9 +92,9 @@ header {
 }
 
 .card-move {
-    transition: all 0.5s ease-in-out;
+    transition: all 0.2s ease-in-out;
     position: absolute;
-    margin-right: 10px;
+    transition-duration: 5s;
 }
 
 .hand {
@@ -102,7 +103,7 @@ header {
 }
 
 .hand .card-move {
-    margin-right: 10px; /* Adjust as needed */
+    margin-right: 10px;
 }
 
 .circle {

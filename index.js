@@ -46,24 +46,35 @@ function pickDealer(){
     cardImg = document.createElement("img");
     card = deck.pop();
     cardImg.src = "./cards/" + card + ".png";
-    document.getElementById("your-cards").appendChild(cardImg);
-
-    cardImg2 = document.createElement("img");
-    card2 = deck.pop();
-    cardImg2.src = "./cards/" + card2 + ".png";
-    document.getElementById("dealer-cards").appendChild(cardImg2);
-
-    isPlayerDealer = getValue(card) <= getValue(card2)
+    document.getElementById("deck").appendChild(cardImg);
+    cardImg.classList.add('card-move');
     setTimeout(() => {
-        document.getElementById("your-cards").removeChild(cardImg);
-        document.getElementById("dealer-cards").removeChild(cardImg2);
-        startGame();
-      }, 1000);
+    animateCardMovement(cardImg, "your-cards");
+    setTimeout(() => {
+        cardImg2 = document.createElement("img");
+        card2 = deck.pop();
+        cardImg2.src = "./cards/" + card2 + ".png";
+        document.getElementById("dealer-cards").appendChild(cardImg2);
+        isPlayerDealer = getValue(card) <= getValue(card2)
+        if(isPlayerDealer){
+            document.getElementById("header").innerText = "You Won! You are the dealer this round";
+        }
+        else{
+            document.getElementById("header").innerText = "Sorry you lost. Bob are the dealer this round";
+        }
+        setTimeout(() => {
+            document.getElementById("your-cards").removeChild(cardImg);
+            document.getElementById("dealer-cards").removeChild(cardImg2);
+            startGame();
+        }, 3000);
+    }, 1000);
+}, 1000);
 }
 
 function startGame() {
     document.getElementById("button").removeEventListener("click", startGame);
     document.getElementById("button-text").innerText = "";
+    document.getElementById("header").innerText = "Pick two cards to add to the Crib";
     removeAllImages(document.getElementById('the-play'));
     removeAllImages(document.getElementById('crib-cards'));
     let images = document.getElementById('deck').querySelectorAll('img');
@@ -154,9 +165,13 @@ function clickCard() {
                 // enableClicks();
                 playedCards = 0;
                 if(isPlayerDealer){
-                    cutDeck();
+                    document.getElementById("header").innerText = "Bob will cut the deck";
+                    setTimeout(function() {
+                        cutDeck();
+                    }, 3000);
                 }
                 else{
+                    document.getElementById("header").innerText = "Cut the deck";
                     document.getElementById("deckImage").addEventListener('click', cutDeck);
                 }
             }, 1000);
@@ -414,21 +429,27 @@ function cutDeck(){
     cardImg.id = "cut-card";
     document.getElementById("deck").appendChild(cardImg);
     if(isPlayerDealer){
-        playCount += dealerPlay();
-        playedCards += 1;
-        document.getElementById("play-sum").innerText = playCount;
+        document.getElementById("header").innerText = "Bob will play first";
+        setTimeout(function() {
+            playCount += dealerPlay();
+            playedCards += 1;
+            document.getElementById("play-sum").innerText = playCount;
+        }, 2000);
     }
-    enableClicks();
-    document.getElementById("deckImage").removeEventListener('click', cutDeck);
+    setTimeout(function() {
+        enableClicks();
+        document.getElementById("header").innerText = "Click a card to play it";
+        document.getElementById("deckImage").removeEventListener('click', cutDeck);
+    }, 3000);
 }
 
 function animateCardMovement(card, location){
     const rect = card.getBoundingClientRect();
     const containerRect = document.getElementById(location).getBoundingClientRect();
-    const containerCenterX = containerRect.width / 2; 
-    const offsetX = containerCenterX - rect.width / 2 - rect.left + (100 * playedCards/2);
-    const offsetY = containerRect.top - rect.top;
-    card.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+    // const containerCenterX = containerRect.width / 2; 
+    // const offsetX = containerCenterX - rect.width / 2 - rect.left + (100 * playedCards/2);
+    // const offsetY = containerRect.top - rect.top;
+    // card.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
     setTimeout(() => {
         document.getElementById(location).appendChild(card);
         card.style.transform = 'none'; 
@@ -503,6 +524,7 @@ function removeAllImages(div) {
 }
 
 function finishRound(){
+    document.getElementById("dealer-card")
     playerPoints += countpoints(playerHand);
     dealerPoints += countpoints(dealerHand);
     if(isPlayerDealer){
