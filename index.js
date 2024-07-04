@@ -710,7 +710,18 @@ function calculateConsecutiveScore(hand) {
         }
     }
     if (currentStreak >= 3) {
-        score += currentStreak;
+        if(duplicate == 2){
+            score += 12;
+        }
+        else if(duplicate == 3){
+            score += 9;
+        }
+        else if(duplicate == 1){
+            score += currentStreak * 2;
+        }
+        else{
+            score += currentStreak;
+        }
     }
     return score;
 }
