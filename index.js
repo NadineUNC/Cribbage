@@ -16,17 +16,12 @@ let isPlayerLastPlay;
 function ObservableNumber(initialValue, player) {
     let value = initialValue;
 
-
-    function notify() {
-        if (value == 121) {
-            finishGame();
-        }
-    }
-
     this.add = function(amount) {
         value += amount;
         document.getElementById(player).innerText = value;
-        notify();
+        if (value >= 12) {
+            finishGame();
+        }
     }
 }
 
@@ -625,7 +620,11 @@ async function finishRound(){
 }
 
 function finishGame(){
-    return
+    console.log("finish game");
+    modal = document.getElementById('modal');
+    modal.classList.add('activemodal');
+    modal.classList.remove('inactivemodal');
+    console.log(modal.classList);
 }
 
 function countpoints(hand){
