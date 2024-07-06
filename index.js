@@ -180,7 +180,7 @@ function cardName(card){
     return card.src.substring(card.src.lastIndexOf("/") + 1, card.src.lastIndexOf(".png"));
 }
 
-function clickCard() {
+async function clickCard() {
     if(pickCrib && cardsPicked < 2){
         this.classList.add('card-move');
         moveCardToCrib(this);
@@ -214,27 +214,25 @@ function clickCard() {
             this.classList.add('card-move');
             moveCardToPlay(this);
             disableClicks();
-            setTimeout(function() {
-                if(bobsHand.length != 0 && playHand.length != 0){
-                    console.log("bobsHand.length != 0 && playHand.length != 0");
+            await sleep(2000);
+            if(bobsHand.length != 0 && playHand.length != 0){
+                console.log("bobsHand.length != 0 && playHand.length != 0");
+                callDealerPlay();
+            }
+            if(bobsHand.length != 0 && playHand.length == 0){
+                console.log("bobsHand.length != 0 && playHand.length == 0");
+                while(bobsHand.length != 0){
                     callDealerPlay();
                 }
-                else if(bobsHand.length != 0 && playHand.length == 0){
-                    console.log("bobsHand.length != 0 && playHand.length == 0");
-                    while(bobsHand.length != 0){
-                        callDealerPlay();
-                    }
-                }
-                if(bobsHand.length + playHand.length == 0){
-                    setTimeout(function() {
-                        finishRound();
-                        return
-                    }, 2000);
-                }
-                if(bobsHand.length == 0){
-                    enableClicks();
-                }
-            }, 2000);
+            }
+            if(bobsHand.length + playHand.length == 0){
+                await sleep(2000);
+                finishRound();
+                return
+            }
+            if(bobsHand.length == 0){
+                enableClicks();
+            }
             this.removeEventListener('click', clickCard);
         }
     }
@@ -566,7 +564,7 @@ function removeAllImages(div) {
     images.forEach(img => div.removeChild(img));
 }
 
-function finishRound(){
+async function finishRound(){
     if(isPlayerLastPlay){
         if(playCount == 31){
             playerPoints.add(1);
@@ -600,33 +598,30 @@ function finishRound(){
     }
     points = countpoints(playerHand);
     document.getElementById("header").innerText = "You hand has " + points + " points";
-    setTimeout(() => {
-        playerPoints.add(countpoints(playerHand));
-        points = countpoints(dealerHand);
-        document.getElementById("header").innerText = "Bob's hand has " + points + " points";
-        setTimeout(() => {
-            dealerPoints.add(countpoints(dealerHand));
-            points = countpoints(cribHand);
-            if(isPlayerDealer){
-                document.getElementById("header").innerText = "You get " + points + " points from the Crib";
-            }
-            else{
-                document.getElementById("header").innerText = "Bob gets " + points + " from the Crib";
-            }
-            setTimeout(() => {
-                if(isPlayerDealer){
-                    playerPoints.add(countpoints(cribHand));
-                }
-                else{
-                    dealerPoints.add(countpoints(cribHand));
-                }
-                isPlayerDealer = !isPlayerDealer;
-                enableClicks();
-                document.getElementById("button-text").innerText = "start next round";
-                document.getElementById("button").addEventListener("click", startGame);
-            }, 2000);
-        }, 2000);
-    }, 2000);
+    await sleep(2000);
+    playerPoints.add(countpoints(playerHand));
+    points = countpoints(dealerHand);
+    document.getElementById("header").innerText = "Bob's hand has " + points + " points";
+    await sleep(2000);
+    dealerPoints.add(countpoints(dealerHand));
+    points = countpoints(cribHand);
+    if(isPlayerDealer){
+        document.getElementById("header").innerText = "You get " + points + " points from the Crib";
+    }
+    else{
+        document.getElementById("header").innerText = "Bob gets " + points + " from the Crib";
+    }
+    await sleep(2000); 
+    if(isPlayerDealer){
+        playerPoints.add(countpoints(cribHand));
+    }
+    else{
+        dealerPoints.add(countpoints(cribHand));
+    }
+    isPlayerDealer = !isPlayerDealer;
+    enableClicks();
+    document.getElementById("button-text").innerText = "start next round";
+    document.getElementById("button").addEventListener("click", startGame);
 }
 
 function finishGame(){
