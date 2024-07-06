@@ -98,6 +98,7 @@ function pickDealer(){
 }
 
 function startGame() {
+    console.log(isPlayerDealer)
     document.getElementById("button").removeEventListener("click", startGame);
     document.getElementById("button-text").innerText = "";
     document.getElementById("header").innerText = "Pick two cards to add to the Crib";
@@ -224,66 +225,44 @@ function clickCard() {
                         callDealerPlay();
                     }
                 }
-                else if(checkPlayableCards(playHand) < 0 && checkPlayableCards(bobsHand) < 0){
-                    console.log("checkPlayableCards(playerHand) < 0 && checkPlayableCards(bobsHand) < 0");
-                    playCount = 0;
-                    if(isPlayerLastPlay){
-                        playerPoints.add(1);
-                        document.getElementById("header").innerText = "You get the Go!";
-                        callDealerPlay();
-                    }
-                    else{
-                        dealerPoints.add(1);
-                        document.getElementById("header").innerText = "Bob gets the Go!";
-                        enableClicks();
-                    }
-                }
                 if(bobsHand.length + playHand.length == 0){
-                    finishRound();
+                    setTimeout(function() {
+                        finishRound();
+                        return
+                    }, 2000);
                 }
-            }, 1000);
+                if(bobsHand.length == 0){
+                    enableClicks();
+                }
+            }, 2000);
             this.removeEventListener('click', clickCard);
         }
-        else if(checkPlayableCards(playHand) < 0 && checkPlayableCards(bobsHand) < 0){
-            console.log("checkPlayableCards(playerHand) < 0 && checkPlayableCards(bobsHand) < 0");
-            playCount = 0;
-            if(isPlayerLastPlay){
-                playerPoints.add(1);
-                document.getElementById("header").innerText = "You get the Go!";
-                callDealerPlay();
-            }
-            else{
-                dealerPoints.add(1);
-                document.getElementById("header").innerText = "Bob gets the Go!";
-                enableClicks();
-            }
-        }
-        if(bobsHand.length + playHand.length == 0){
-            finishRound();
-        }
     }
-    console.log(playHand);
-    console.log(bobsHand);
+    // console.log(playHand);
+    // console.log(bobsHand);
 }
 
-function callDealerPlay(){
-    if(bobsHand.length + playHand.length == 0){
-        finishRound();
-        return
-    }
+async function callDealerPlay(){
     if(checkPlayableCards(playHand) < 0 && checkPlayableCards(bobsHand) < 0){
         console.log("checkPlayableCards(playerHand) < 0 && checkPlayableCards(bobsHand) < 0");
-        playCount = 0;
         if(isPlayerLastPlay){
+            if(playCount == 31){
+                playerPoints.add(1);
+            }
             playerPoints.add(1);
             document.getElementById("header").innerText = "You get the Go!";
-            callDealerPlay();
         }
         else{
+            if(playCount == 31){
+                dealerPoints.add(1);
+            }
             dealerPoints.add(1);
             document.getElementById("header").innerText = "Bob gets the Go!";
-            enableClicks();
         }
+        await sleep(2000);
+        playCount = 0;
+        document.getElementById("play-sum").innerText = playCount;
+        await sleep(1000);
     }
     result =  dealerPlay();
     if (result != 0){
@@ -291,21 +270,40 @@ function callDealerPlay(){
         dealerPoints.add(checkPlayPoints());
         document.getElementById("play-sum").innerText = playCount;
     }
+    if(bobsHand.length + playHand.length == 0){
+        setTimeout(function() {
+            finishRound();
+            return
+        }, 2000);
+    }
     if(checkPlayableCards(playHand) < 0 && checkPlayableCards(bobsHand) < 0){
         console.log("checkPlayableCards(playerHand) < 0 && checkPlayableCards(bobsHand) < 0");
-        playCount = 0;
         if(isPlayerLastPlay){
+            if(playCount == 31){
+                playerPoints.add(1);
+            }
             playerPoints.add(1);
             document.getElementById("header").innerText = "You get the Go!";
             callDealerPlay();
         }
         else{
+            if(playCount == 31){
+                dealerPoints.add(1);
+            }
             dealerPoints.add(1);
             document.getElementById("header").innerText = "Bob gets the Go!";
             enableClicks();
         }
+        await sleep(2000);
+        playCount = 0;
+        document.getElementById("play-sum").innerText = playCount;
+        await sleep(1000);
     }
     enableClicks();
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 function moveCardToCrib(card){
@@ -336,7 +334,7 @@ function moveCardToPlay(card){
 
 function checkPlayPoints(){
     let points = 0;
-    if(playCount == 15 || playCount == 31){
+    if(playCount == 15){
         points += 2
     }
     let playCards = document.getElementById("the-play")
@@ -569,6 +567,20 @@ function removeAllImages(div) {
 }
 
 function finishRound(){
+    if(isPlayerLastPlay){
+        if(playCount == 31){
+            playerPoints.add(1);
+        }
+        playerPoints.add(1);
+        document.getElementById("header").innerText = "You get the Go!";
+    }
+    else{
+        if(playCount == 31){
+            dealerPoints.add(1);
+        }
+        dealerPoints.add(1);
+        document.getElementById("header").innerText = "Bob gets the Go!";
+    }
     document.getElementById("dealer-cards").innerText = "";
     document.getElementById("crib-cards").innerText = "";
     document.getElementById("your-cards").innerText = "";
@@ -608,9 +620,9 @@ function finishRound(){
                 else{
                     dealerPoints.add(countpoints(cribHand));
                 }
+                isPlayerDealer = !isPlayerDealer;
                 enableClicks();
                 document.getElementById("button-text").innerText = "start next round";
-                isPlayerDealer = !isPlayerDealer;
                 document.getElementById("button").addEventListener("click", startGame);
             }, 2000);
         }, 2000);
