@@ -9,42 +9,44 @@
         <script src="index.js"></script>
     </head>
 
-    <header>
-        <h2 class="header" id="header">This is Cribbage! The first person to 121 points wins. Click the deck to draw a card. Lowest card becomes the first dealer.</h2>
-    </header>
-
     <body>
-        <div class="overlay" id="overlay"></div>
-        <div  class="grid-container">
-            <div class="deck-column">
-                <button class="button" id="button"><span id="button-text"></span></button>
-                <div class="deck" id="deck">
-                    <img src="./cards/BACK.png" id="deckImage">
+        <header>
+            <h2 class="header" id="header">This is Cribbage! The first person to 121 points wins. Click the deck to draw a card. Lowest card becomes the first dealer.</h2>
+        </header>
+        <div class="body">
+            <div class="overlay" id="overlay"></div>
+            <div  class="grid-container">
+                <div class="deck-column">
+                    <h2>Deck</h2>
+                    <div class="deck" id="deck">
+                        <img src="./cards/BACK.png" id="deckImage">
+                    </div>
+
+                    <h2>Crib</h2>
+                    <div class="hand" id="crib-cards"></div>
                 </div>
 
-                <h2>Crib</h2>
-                <div class="hand" id="crib-cards"></div>
+                <div class="hands-column">
+                    <h2><span id="bob-dealer"></span> Bob's Points: <span id="dealer-points">0</span></h2>
+                    <div class="hand" id="dealer-cards"></div>
+
+                    <h2>Play Count: <span id="play-sum">0</span></h2>
+                    <div class="hand" id="the-play"></div>
+
+                    <h2><span id="player-dealer"></span> Your Points: <span id="player-points">0</span></h2>
+                    <div class="hand hand fan active-hand" id="your-cards"></div>
+
+                    <br>
+                    <p id="results"></p>
+                </div>
             </div>
-
-            <div class="hands-column">
-                <h2><span id="bob-dealer"></span> Bob's Points: <span id="dealer-points">0</span></h2>
-                <div class="hand" id="dealer-cards"></div>
-
-                <h2>Play Count: <span id="play-sum">0</span></h2>
-                <div class="hand" id="the-play"></div>
-
-                <h2><span id="player-dealer"></span> Your Points: <span id="player-points">0</span></h2>
-                <div class="hand hand fan active-hand" id="your-cards"></div>
-
-                <br>
-                <p id="results"></p>
+            <button class="inactivemodal" id="button"><h1 id="button-text">Start Next Round</h1></button>
+            <div class="inactivemodal" id="modal">
+                <h1>Congratulations You Won!</h1>
             </div>
-        </div>
-        <div class="inactivemodal" id="modal">
-            <h1>Congratulations You Won!</h1>
-        </div>
-        <div class="inactivemodal" id="modal2">
-            <h1>Sorry You Lost!</h1>
+            <div class="inactivemodal" id="modal2">
+                <h1>Sorry You Lost!</h1>
+            </div>
         </div>
     </body>
 </html>
