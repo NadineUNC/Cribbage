@@ -23,6 +23,10 @@ function ObservableNumber(initialValue, player) {
             finishGame();
         }
     }
+
+    this.get = function() {
+        return value
+    }
 }
 
 
@@ -192,7 +196,7 @@ async function clickCard() {
                     document.getElementById("header").innerText = "Bob will cut the deck";
                     setTimeout(function() {
                         cutDeck();
-                    }, 3000);
+                    }, 2000);
                 }
                 else{
                     document.getElementById("header").innerText = "Cut the deck";
@@ -211,11 +215,11 @@ async function clickCard() {
             disableClicks();
             await sleep(2000);
             if(bobsHand.length != 0 && playHand.length != 0){
-                console.log("bobsHand.length != 0 && playHand.length != 0");
+                console.log("place 1");
                 callDealerPlay();
             }
             if(bobsHand.length != 0 && playHand.length == 0){
-                console.log("bobsHand.length != 0 && playHand.length == 0");
+                console.log("place 2");
                 while(bobsHand.length != 0){
                     callDealerPlay();
                 }
@@ -237,7 +241,7 @@ async function clickCard() {
 
 async function callDealerPlay(){
     if(checkPlayableCards(playHand) < 0 && checkPlayableCards(bobsHand) < 0){
-        console.log("checkPlayableCards(playerHand) < 0 && checkPlayableCards(bobsHand) < 0");
+        console.log("place 3");
         if(isPlayerLastPlay){
             if(playCount == 31){
                 playerPoints.add(1);
@@ -263,21 +267,20 @@ async function callDealerPlay(){
         dealerPoints.add(checkPlayPoints());
         document.getElementById("play-sum").innerText = playCount;
     }
-    if(bobsHand.length + playHand.length == 0){
-        setTimeout(function() {
-            finishRound();
-            return
-        }, 2000);
-    }
     if(checkPlayableCards(playHand) < 0 && checkPlayableCards(bobsHand) < 0){
-        console.log("checkPlayableCards(playerHand) < 0 && checkPlayableCards(bobsHand) < 0");
+        console.log("place 4");
         if(isPlayerLastPlay){
             if(playCount == 31){
                 playerPoints.add(1);
             }
             playerPoints.add(1);
             document.getElementById("header").innerText = "You get the Go!";
-            callDealerPlay();
+            if(dealerHand.length != 0){
+                await sleep(2000);
+                playCount = 0;
+                document.getElementById("play-sum").innerText = playCount;
+                callDealerPlay();
+            }
         }
         else{
             if(playCount == 31){
@@ -285,12 +288,11 @@ async function callDealerPlay(){
             }
             dealerPoints.add(1);
             document.getElementById("header").innerText = "Bob gets the Go!";
+            await sleep(2000);
+            playCount = 0;
+            document.getElementById("play-sum").innerText = playCount;
             enableClicks();
         }
-        await sleep(2000);
-        playCount = 0;
-        document.getElementById("play-sum").innerText = playCount;
-        await sleep(1000);
     }
     enableClicks();
 }
@@ -614,17 +616,24 @@ async function finishRound(){
         dealerPoints.add(countpoints(cribHand));
     }
     isPlayerDealer = !isPlayerDealer;
+    console.log(isPlayerDealer);
     enableClicks();
     document.getElementById("button-text").innerText = "start next round";
     document.getElementById("button").addEventListener("click", startGame);
 }
 
 function finishGame(){
-    console.log("finish game");
-    modal = document.getElementById('modal');
-    modal.classList.add('activemodal');
-    modal.classList.remove('inactivemodal');
-    console.log(modal.classList);
+    if(playerPoints.get() >= 12){
+        modal = document.getElementById('modal');
+        modal.classList.add('activemodal');
+        modal.classList.remove('inactivemodal');
+    }
+    if(dealerPoints.get() >= 12){
+        modal = document.getElementById('modal2');
+        modal.classList.add('activemodal');
+        modal.classList.remove('inactivemodal');
+    }
+    window.stop();
 }
 
 function countpoints(hand){
