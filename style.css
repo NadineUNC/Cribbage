@@ -1,18 +1,25 @@
-body {
+header {
     font-family: Arial, Helvetica, sans-serif;
+    background-color: #FFFFE4;
     text-align: center;
-    background-color: #29923f;
+    height: 5vh;
     margin: 0;
     padding: 0;
 }
 
-header {
-    background-color: #FFFFE4;
+body {
+    font-family: Arial, Helvetica, sans-serif;
     text-align: center;
-    vertical-align: middle;
     margin: 0;
     padding: 0;
-    height: 5vh;
+    background-color: #FFFFE4;
+    overflow: hidden;
+}
+
+.body {
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    background-color: #29923f;
 }
 
 .grid-container {
@@ -117,6 +124,21 @@ header {
     vertical-align: middle;
     justify-content: center;
     align-items: center;
+}
+
+.button {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    transition: 200ms ease-in-out;
+    border: 1px solid black;
+    border-radius: 10px;
+    z-index: 10;
+    background-color: #FFFFE4;
+    width: 500px;
+    max-width: 80%;
+    color: black;
 }
 
 .inactivemodal {

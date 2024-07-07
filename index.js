@@ -19,7 +19,7 @@ function ObservableNumber(initialValue, player) {
     this.add = function(amount) {
         value += amount;
         document.getElementById(player).innerText = value;
-        if (value >= 12) {
+        if (value >= 121) {
             finishGame();
         }
     }
@@ -85,7 +85,7 @@ function pickDealer(){
             document.getElementById("header").innerText = "You Won! You are the dealer this round";
         }
         else{
-            document.getElementById("header").innerText = "Sorry you lost. Bob are the dealer this round";
+            document.getElementById("header").innerText = "Sorry you lost. Bob is the dealer this round";
         }
         setTimeout(() => {
             document.getElementById("your-cards").removeChild(cardImg);
@@ -214,11 +214,35 @@ async function clickCard() {
             moveCardToPlay(this);
             disableClicks();
             await sleep(2000);
+            if(checkPlayableCards(playerHand) < 0 && checkPlayableCards(bobsHand) < 0){
+                console.log("place 3");
+                if(isPlayerLastPlay){
+                    if(playCount == 31){
+                        playerPoints.add(1);
+                    }
+                    playerPoints.add(1);
+                    document.getElementById("header").innerText = "You get the Go!";
+                }
+                else{
+                    if(playCount == 31){
+                        dealerPoints.add(1);
+                    }
+                    dealerPoints.add(1);
+                    document.getElementById("header").innerText = "Bob gets the Go!";
+                }
+                await sleep(2000);
+                playCount = 0;
+                document.getElementById("play-sum").innerText = playCount;
+                await sleep(1000);
+            }
             if(bobsHand.length != 0 && playHand.length != 0){
                 console.log("place 1");
                 callDealerPlay();
+                while(bobsHand.length != 0 && checkPlayableCards(playerHand) < 0){
+                    callDealerPlay();
+                }
             }
-            if(bobsHand.length != 0 && playHand.length == 0){
+            if(playHand.length == 0){
                 console.log("place 2");
                 while(bobsHand.length != 0){
                     callDealerPlay();
@@ -240,7 +264,7 @@ async function clickCard() {
 }
 
 async function callDealerPlay(){
-    if(checkPlayableCards(playHand) < 0 && checkPlayableCards(bobsHand) < 0){
+    if(checkPlayableCards(playerHand) < 0 && checkPlayableCards(bobsHand) < 0){
         console.log("place 3");
         if(isPlayerLastPlay){
             if(playCount == 31){
@@ -266,8 +290,11 @@ async function callDealerPlay(){
         playCount += result;
         dealerPoints.add(checkPlayPoints());
         document.getElementById("play-sum").innerText = playCount;
+        if(dealerHand.length == 0){
+            return
+        }
     }
-    if(checkPlayableCards(playHand) < 0 && checkPlayableCards(bobsHand) < 0){
+    if(checkPlayableCards(playerHand) < 0 && checkPlayableCards(bobsHand) < 0){
         console.log("place 4");
         if(isPlayerLastPlay){
             if(playCount == 31){
@@ -576,6 +603,7 @@ async function finishRound(){
         dealerPoints.add(1);
         document.getElementById("header").innerText = "Bob gets the Go!";
     }
+    await sleep(2000);
     document.getElementById("dealer-cards").innerText = "";
     document.getElementById("crib-cards").innerText = "";
     document.getElementById("your-cards").innerText = "";
@@ -593,14 +621,27 @@ async function finishRound(){
         cardImg.src = "./cards/" + playerHand[i] + ".png";
         document.getElementById("your-cards").appendChild(cardImg);
     }
-    points = countpoints(playerHand);
-    document.getElementById("header").innerText = "You hand has " + points + " points";
-    await sleep(2000);
-    playerPoints.add(countpoints(playerHand));
-    points = countpoints(dealerHand);
-    document.getElementById("header").innerText = "Bob's hand has " + points + " points";
-    await sleep(2000);
-    dealerPoints.add(countpoints(dealerHand));
+    if(isPlayerDealer){
+        points = countpoints(dealerHand);
+        document.getElementById("header").innerText = "Bob's hand has " + points + " points";
+        await sleep(5000);
+        dealerPoints.add(countpoints(dealerHand));
+        points = countpoints(playerHand);
+        document.getElementById("header").innerText = "Your hand has " + points + " points";
+        await sleep(5000);
+        playerPoints.add(countpoints(playerHand));
+    }
+    else{
+        points = countpoints(playerHand);
+        document.getElementById("header").innerText = "Your hand has " + points + " points";
+        await sleep(5000);
+        playerPoints.add(countpoints(playerHand));
+        points = countpoints(dealerHand);
+        document.getElementById("header").innerText = "Bob's hand has " + points + " points";
+        await sleep(5000);
+        dealerPoints.add(countpoints(dealerHand));
+        points = countpoints(cribHand);
+    }
     points = countpoints(cribHand);
     if(isPlayerDealer){
         document.getElementById("header").innerText = "You get " + points + " points from the Crib";
@@ -608,7 +649,7 @@ async function finishRound(){
     else{
         document.getElementById("header").innerText = "Bob gets " + points + " from the Crib";
     }
-    await sleep(2000); 
+    await sleep(5000); 
     if(isPlayerDealer){
         playerPoints.add(countpoints(cribHand));
     }
@@ -618,22 +659,25 @@ async function finishRound(){
     isPlayerDealer = !isPlayerDealer;
     console.log(isPlayerDealer);
     enableClicks();
-    document.getElementById("button-text").innerText = "start next round";
+    document.getElementById("button-text").innerText = "Start Next Round";
+    button = document.getElementById('button');
+    button.classList.add('button');
+    button.classList.remove('inactivemodal');
     document.getElementById("button").addEventListener("click", startGame);
 }
 
 function finishGame(){
-    if(playerPoints.get() >= 12){
+    if(playerPoints.get() >= 121){
         modal = document.getElementById('modal');
         modal.classList.add('activemodal');
         modal.classList.remove('inactivemodal');
     }
-    if(dealerPoints.get() >= 12){
+    if(dealerPoints.get() >= 121){
         modal = document.getElementById('modal2');
         modal.classList.add('activemodal');
         modal.classList.remove('inactivemodal');
     }
-    window.stop();
+    throw new Exeption("Game over");
 }
 
 function countpoints(hand){
